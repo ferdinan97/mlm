@@ -52,9 +52,16 @@ class IndexController extends Controller
 
         $data['user_id'] = auth()->user()->id;
 
+        $upline = Upline::select('user_id')->where('user_id', $data['user_id'])->get();
         
-        Upline::create($data);
-        return redirect('/')->with('berhasil', 'Berhasil Menambah Atasan');
+        if(empty($upline)){
+            return redirect('/addatasan')->with('gagal', 'Gagal Menambah Atasan Anda Sudah Punya Atasan');
+        }
+        
+        else{
+            Upline::create($data);
+            return redirect('/')->with('berhasil', 'Berhasil Menambah Atasan');
+        }
     }
 
     public function addbawahan(Downline $downline){
@@ -69,10 +76,16 @@ class IndexController extends Controller
         ]);
 
         $data['user_id'] = auth()->user()->id;
+
+        $downline = Downline::select('user_id')->where('user_id', $data['user_id'])->get();
         
-              
+        if(count($downline) >= 2){
+            return redirect('/addbawahan')->with('gagal', 'Gagal Menambah Bawahan, Anda Sudah Memiliki 2 Bawahan ');
+        }
+        
+        else{
         Downline::create($data);
         return redirect('/')->with('berhasil', 'Berhasil Menambah Bawahan');
-        
+        }
     }
 }

@@ -33,7 +33,7 @@
                     <td>{{ $users->address }}</td>
                     <td>{{ $users->nmr_telepon }}</td>
                     <td> @foreach($users->Downline as $downline){{ $downline->User->name }}, @endforeach</td>
-                    <td> {{ $users->Upline }}</td>
+                    <td> {{ $users->Upline->User->name ?? ''}}</td>
                 </tr>
             @endforeach
             </tbody>
